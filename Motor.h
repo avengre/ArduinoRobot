@@ -10,7 +10,7 @@ enum Direction
 {
 	MOTOR_UNDEFINED,
 	MOTOR_FORWARD,
-	MOTOR_BACKWARDS,
+	MOTOR_BACKWARD,
 	MOTOR_HALTED
 };
 // This will control each motor, there may be multiple Motor Controllers
@@ -35,10 +35,17 @@ public:
 
 	void setMotorForward(uchar inPower = 255)
 	{
-		DirectionPin = HIGH;
-		
-	};
 
+		DirectionPin = HIGH;
+		setPower(inPower);
+		eMotorDirection = MOTOR_FORWARD;
+	};
+	void setMotorBackward(uchar inPower = 255)
+	{
+		DirectionPin = LOW;
+		setPower(inPower);
+		eMotorDirection = MOTOR_BACKWARD;
+	};
 	void setPower(uchar inPower)
 	{
 		PowerPin = inPower;
@@ -47,7 +54,17 @@ public:
 	{
 		return PowerPin;
 	};
+
+	bool getIsInverted()
+	{
+		return bIsInverted;
+	};
+	bool setIsInverted(bool inInverted)
+	{
+		bIsInverted = inInverted;
+	};
 private:
+	bool bIsInverted; // If motor will be facing opposite direction, will this be inverted  (IE, left motor and right motor, one will have to be inverted)
 	bool bIsBraked;
 	PinNum BrakePin, DirectionPin, PowerPin; // Digital
 	PinNum SensingPin;  // Analog
